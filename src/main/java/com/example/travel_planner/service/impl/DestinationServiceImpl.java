@@ -1,24 +1,23 @@
 package com.example.travel_planner.service.impl;
 
-import com.example.travel_planner.dto.BulkAddResponse;
-import com.example.travel_planner.dto.CountryResponse;
-import com.example.travel_planner.dto.DestinationRequest;
-import com.example.travel_planner.dto.RestCountryApiResponse;
+import com.example.travel_planner.dto.*;
+import com.example.travel_planner.dto.request.DestinationRequest;
 import com.example.travel_planner.exception.EntityNotFoundException;
 import com.example.travel_planner.mapper.CountryMapper;
 import com.example.travel_planner.mapper.DestinationMapper;
+import com.example.travel_planner.model.Destination;
 import com.example.travel_planner.repository.DestinationRepository;
 import com.example.travel_planner.service.DestinationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,15 +34,25 @@ public class DestinationServiceImpl implements DestinationService {
     // ── Admin ──────────────────────────────────────────────────────────────────
 
     @Override
-    public List<CountryResponse> fetchFromApi() {
+    public Page<CountryResponse> fetchFromApi(int page, int size) {
         RestCountryApiResponse[] rawCountries =
                 restTemplate.getForObject(apiUrl, RestCountryApiResponse[].class);
 
-        return Optional.ofNullable(rawCountries).map(Arrays::asList)
+        List<CountryResponse> allCountries = Optional.ofNullable(rawCountries).map(Arrays::asList)
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(countryMapper::toCountryResponse)
                 .toList();
+
+        Pageable pageable = PageRequest.of(page, size);
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), allCountries.size());
+
+        List<CountryResponse> subList = (start <= allCountries.size()) 
+                ? allCountries.subList(start, end) 
+                : Collections.emptyList();
+
+        return new PageImpl<>(subList, pageable, allCountries.size());
     }
 
     @Override
@@ -87,4 +96,34 @@ public class DestinationServiceImpl implements DestinationService {
         }
         destinationRepository.deleteById(id);
     }
+
+
+    @Override
+    public Page<DestinationResponse> getDestinations(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return destinationRepository.findAllApproved(pageable)
+                .map(destinationMapper::toResponse);
+    }
+
+    @Override
+    public DestinationResponse getDestinationById(Long id) {
+        if (!destinationRepository.existsById(id)) {
+            throw new EntityNotFoundException("Destination", id);
+        }
+
+        Destination destination = destinationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Destination", id));
+
+        return destinationMapper.toResponse(destination);
+    }
+
+    @Override
+    public List<DestinationResponse> getDestinationsByName(String name) {
+        return destinationRepository.findByApprovedTrueAndNameContainingIgnoreCase(name)
+                .stream()
+                .map(destinationMapper::toResponse)
+                .toList();
+    }
 }
+
+

@@ -1,6 +1,6 @@
 package com.example.travel_planner.mapper;
 
-import com.example.travel_planner.dto.DestinationRequest;
+import com.example.travel_planner.dto.request.DestinationRequest;
 import com.example.travel_planner.dto.DestinationResponse;
 import com.example.travel_planner.model.Destination;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class DestinationMapper {
                 .population(request.population())
                 .currency(request.currency())
                 .flagUrl(request.flagUrl())
-                .approved(false)
+                .approved(true)
                 .build();
     }
 
@@ -29,7 +29,6 @@ public class DestinationMapper {
                 destination.getPopulation(),
                 destination.getCurrency(),
                 destination.getFlagUrl(),
-                destination.getApproved()
-        );
+                destination.getApproved());
     }
 }
