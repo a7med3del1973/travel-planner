@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DestinationRepository extends JpaRepository<Destination, Integer> {
+public interface DestinationRepository extends JpaRepository<Destination, Long> {
 
     @Query("SELECT d FROM Destination d WHERE d.approved = true")
     List<Destination> findByApprovedTrue();
