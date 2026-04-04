@@ -1,8 +1,8 @@
 package com.example.travel_planner.controller;
 
+import com.example.travel_planner.dto.BulkAddResponse;
 import com.example.travel_planner.dto.CountryResponse;
 import com.example.travel_planner.dto.DestinationRequest;
-import com.example.travel_planner.dto.DestinationResponse;
 import com.example.travel_planner.dto.MessageResponse;
 import com.example.travel_planner.service.DestinationService;
 import jakarta.validation.Valid;
@@ -31,6 +31,14 @@ public class AdminController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body("Destination created successfully");
+    }
+
+    @PostMapping("/destinations/bulk")
+    public ResponseEntity<BulkAddResponse> bulkAddDestinations(
+            @Valid @RequestBody List<DestinationRequest> requests) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(destinationService.bulkAddDestinations(requests));
     }
 
     @DeleteMapping("/destinations/{id}")
