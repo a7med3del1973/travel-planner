@@ -1,0 +1,72 @@
+<div class="dest-card" [class.want-to-visit]="isWanted()">
+  <!-- Flag Banner -->
+  <div class="card-banner">
+    @if (destination().flagUrl) {
+      <img
+        [src]="destination().flagUrl"
+        [alt]="destination().name + ' flag'"
+        class="flag-banner"
+        loading="lazy"
+      />
+    } @else {
+      <div class="flag-placeholder"><i class="fa-solid fa-earth-americas"></i></div>
+    }
+    <div class="card-region-badge">{{ destination().region }}</div>
+    @if (isWanted()) {
+      <div class="want-badge" aria-label="Marked as Want to Visit"><i class="fa-solid fa-heart"></i> Want to Visit</div>
+    }
+  </div>
+
+  <!-- Card Body -->
+  <div class="card-content">
+    <h3 class="dest-name">{{ destination().name }}</h3>
+    <p class="dest-capital"><i class="fa-solid fa-building-columns"></i> {{ destination().capital }}</p>
+
+    <div class="dest-meta">
+      <div class="meta-item">
+        <span class="meta-icon"><i class="fa-solid fa-users"></i></span>
+        <span class="meta-value">{{ destination().population | population }}</span>
+        <span class="meta-label">Population</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon"><i class="fa-solid fa-coins"></i></span>
+        <span class="meta-value">{{ destination().currency }}</span>
+        <span class="meta-label">Currency</span>
+      </div>
+    </div>
+
+    <!-- Actions Row -->
+    <div class="card-actions">
+      @if (showDetails()) {
+        <button class="btn btn-secondary btn-sm" (click)="viewDetails.emit(destination())">
+          <i class="fa-solid fa-eye"></i> View Details
+        </button>
+      }
+      @if (showWantToVisit() && !isWanted()) {
+        <button
+          class="btn btn-sm want-btn"
+          [class.loading]="wantLoading()"
+          (click)="!wantLoading() && wantToVisit.emit(destination().id)"
+          [attr.aria-busy]="wantLoading()"
+        >
+          @if (wantLoading()) {
+            <span class="mini-spin"></span>
+          } @else {
+            <i class="fa-solid fa-heart"></i>
+          }
+          Want to Visit
+        </button>
+      }
+      @if (showDelete()) {
+        <button class="btn btn-danger btn-sm btn-icon" (click)="delete.emit(destination().id)" aria-label="Delete destination">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      }
+      @if (showAdd()) {
+        <button class="btn btn-success btn-sm" (click)="add.emit(destination())">
+          <i class="fa-solid fa-plus"></i> Add
+        </button>
+      }
+    </div>
+  </div>
+</div>

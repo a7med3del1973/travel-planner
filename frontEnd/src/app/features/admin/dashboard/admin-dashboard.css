@@ -1,0 +1,137 @@
+.dashboard-page {
+  max-width: 960px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* Quick Actions */
+.quick-actions { margin-bottom: 2.5rem; }
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+  .actions-grid { grid-template-columns: 1fr; }
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  width: 100%;
+  box-shadow: var(--shadow-sm);
+}
+
+.action-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: #f8f9ff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent);
+}
+
+.action-icon {
+  font-size: 1.25rem;
+  width: 52px;
+  height: 52px;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--accent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.action-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.action-info strong {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.action-info span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.action-arrow {
+  color: var(--accent-light);
+  font-size: 0.9rem;
+}
+
+/* Steps */
+.info-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.step-num {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gradient);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.step-text strong {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.step-text span {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}

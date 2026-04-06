@@ -1,0 +1,32 @@
+<div class="user-shell">
+  <!-- Top Navbar -->
+  <header class="user-navbar" role="banner">
+    <div class="navbar-brand">
+      <a routerLink="/user/dashboard" class="brand-link" aria-label="Home">
+        <span class="brand-icon"><i class="fa-solid fa-paper-plane"></i></span>
+        <span class="brand-name">Travel<span class="brand-accent">Planner</span></span>
+      </a>
+    </div>
+
+    <nav class="navbar-nav" aria-label="Main navigation">
+      <a routerLink="/user/dashboard" routerLinkActive="active" class="nav-link">
+        <i class="fa-solid fa-compass"></i> Destinations
+      </a>
+    </nav>
+
+    <div class="navbar-user">
+      <div class="user-chip">
+        <div class="user-avatar-sm">{{ authStore.username()?.charAt(0)?.toUpperCase() }}</div>
+        <span class="user-name-sm">{{ authStore.username() }}</span>
+      </div>
+      <button class="logout-btn-sm" (click)="logout()" aria-label="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="user-main">
+    <router-outlet />
+  </main>
+</div>

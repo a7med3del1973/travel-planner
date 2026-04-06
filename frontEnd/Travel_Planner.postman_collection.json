@@ -1,0 +1,404 @@
+{
+  "info": {
+    "name": "Travel Planner API",
+    "description": "Complete API documentation for the Travel Planner backend project. This collection contains all endpoints grouped by their controllers: Authentication, User operations, and Admin operations.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth Controller",
+      "description": "Endpoints corresponding to Authentication (Login & Register).",
+      "item": [
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"test@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Successful Login",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"username\": \"test@example.com\",\n  \"role\": \"USER\",\n  \"token\": \"eyJhbGciOiJIUzI1NiJ9...\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "User Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johndoe\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 - User Created",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"username\": \"johndoe\",\n  \"role\": \"USER\",\n  \"token\": \"eyJhbGciOiJIUzI1NiJ9...\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User Controller",
+      "description": "Endpoints related to standard user actions, destinations discovery, and visits.",
+      "item": [
+        {
+          "name": "Get Approved Destinations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/approved-destinations?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "approved-destinations"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number (0-indexed)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Size of each page"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Page of Destinations",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"name\": \"France\",\n      \"capital\": \"Paris\",\n      \"region\": \"Europe\",\n      \"population\": 67000000,\n      \"currency\": \"EUR\",\n      \"flagUrl\": \"https://example.com/flags/fr.png\",\n      \"approved\": true\n    }\n  ],\n  \"pageable\": { \"pageNumber\": 0, \"pageSize\": 10 },\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Destination By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/destination/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "destination", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Destination Details",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"name\": \"France\",\n  \"capital\": \"Paris\",\n  \"region\": \"Europe\",\n  \"population\": 67000000,\n  \"currency\": \"EUR\",\n  \"flagUrl\": \"https://example.com/flags/fr.png\",\n  \"approved\": true\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search Destinations By Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/destinations/search?name=France",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "destinations", "search"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "France",
+                  "description": "Name or partial name of the destination"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - List of Destinations",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "[\n  {\n    \"id\": 1,\n    \"name\": \"France\",\n    \"capital\": \"Paris\",\n    \"region\": \"Europe\",\n    \"population\": 67000000,\n    \"currency\": \"EUR\",\n    \"flagUrl\": \"https://example.com/flags/fr.png\",\n    \"approved\": true\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Mark Want To Visit",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/destination/1/want-to-visit?userId=123",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "destination", "1", "want-to-visit"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "123",
+                  "description": "ID of the user wanting to visit"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Marked Successfully",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"message\": \"Destination marked as Want to Visit\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin Controller",
+      "description": "Endpoints to manage data, such as destinations creation and fetching from external API.",
+      "item": [
+        {
+          "name": "Fetch From API",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/fetch-from-api?page=0&size=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "fetch-from-api"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "description": "Page number (0-indexed)"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "description": "Size of each page"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Expected Output",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"content\": [\n    {\n      \"name\": \"Japan\",\n      \"capital\": \"Tokyo\",\n      \"region\": \"Asia\",\n      \"population\": 125000000,\n      \"currency\": \"JPY\",\n      \"flagUrl\": \"https://example.com/flags/jp.png\"\n    }\n  ],\n  \"pageable\": { \"pageNumber\": 0, \"pageSize\": 10 },\n  \"totalElements\": 1,\n  \"totalPages\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Add Destination",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Japan\",\n  \"capital\": \"Tokyo\",\n  \"region\": \"Asia\",\n  \"population\": 125000000,\n  \"currency\": \"JPY\",\n  \"flagUrl\": \"https://example.com/flags/jp.png\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/destinations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "destinations"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 - Successfully Created",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "text",
+              "header": [
+                { "key": "Content-Type", "value": "text/plain;charset=UTF-8" }
+              ],
+              "body": "Destination created successfully"
+            }
+          ]
+        },
+        {
+          "name": "Bulk Add Destinations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"Japan\",\n    \"capital\": \"Tokyo\",\n    \"region\": \"Asia\",\n    \"population\": 125000000,\n    \"currency\": \"JPY\",\n    \"flagUrl\": \"https://example.com/flags/jp.png\"\n  },\n  {\n    \"name\": \"Brazil\",\n    \"capital\": \"Brasilia\",\n    \"region\": \"Americas\",\n    \"population\": 214300000,\n    \"currency\": \"BRL\",\n    \"flagUrl\": \"https://example.com/flags/br.png\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/destinations/bulk",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "destinations", "bulk"]
+            }
+          },
+          "response": [
+            {
+              "name": "201 - Bulk Addition Result",
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"saved\": 2,\n  \"skipped\": 0,\n  \"skippedNames\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Destination",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/destinations/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "destinations", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Deleted Successfully",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                { "key": "Content-Type", "value": "application/json" }
+              ],
+              "body": "{\n  \"message\": \"Destination Deleted successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwtToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

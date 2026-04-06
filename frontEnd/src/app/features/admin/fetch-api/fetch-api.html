@@ -1,0 +1,89 @@
+<div class="page animate-slide-in">
+  <div class="page-header">
+    <div>
+      <h1>Fetch from API</h1>
+      <p>Browse destinations from the external travel API and add them to your database</p>
+    </div>
+    <button class="btn btn-primary" (click)="fetchDestinations(0)" [disabled]="isLoading()" id="fetch-btn">
+      @if (isLoading()) { <span class="btn-spinner"></span> Fetching… } @else { <i class="fa-solid fa-cloud-arrow-down"></i> Fetch Destinations }
+    </button>
+  </div>
+
+  <!-- Messages -->
+  @if (successMsg()) {
+    <div class="alert alert-success" role="status"><i class="fa-solid fa-circle-check"></i> {{ successMsg() }}</div>
+  }
+  @if (errorMsg()) {
+    <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}</div>
+  }
+
+  <!-- Loading -->
+  @if (isLoading()) {
+    <app-loading-spinner label="Fetching from external API…" />
+  }
+
+  <!-- Results -->
+  @if (!isLoading() && page()) {
+    <!-- Toolbar -->
+    <div class="api-toolbar">
+      <span class="results-count">
+        {{ page()?.totalElements }} destinations found
+      </span>
+      <div class="toolbar-actions">
+        @if (hasSelection()) {
+          <span class="selection-badge">{{ selectionCount() }} selected</span>
+          <button class="btn btn-secondary btn-sm" (click)="clearSelection()">Clear</button>
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="bulkAdd()"
+            [disabled]="isBulkSaving()"
+            id="bulk-add-btn"
+          >
+            @if (isBulkSaving()) { <span class="btn-spinner-sm"></span> Adding… } @else { <i class="fa-solid fa-plus"></i> Bulk Add ({{ selectionCount() }}) }
+          </button>
+        } @else {
+          <button class="btn btn-secondary btn-sm" (click)="selectAll()">Select All on Page</button>
+        }
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="destinations-grid">
+      @for (dest of page()?.content ?? []; track dest.name) {
+        <div class="card-wrapper" [class.selected]="isSelected(dest)">
+          <div class="select-overlay" (click)="toggleSelect(dest)" [attr.aria-label]="'Select ' + dest.name">
+            <div class="checkbox-circle" [class.checked]="isSelected(dest)">
+              @if (isSelected(dest)) { <i class="fa-solid fa-check"></i> }
+            </div>
+          </div>
+          <app-destination-card
+            [destination]="dest"
+            [showAdd]="true"
+            (add)="addSingle($event)"
+          />
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if ((page()?.totalPages ?? 0) > 1) {
+      <div class="pagination-bar">
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="page()?.totalPages ?? 0"
+          [totalElements]="page()?.totalElements ?? 0"
+          (pageChange)="onPageChange($event)"
+        />
+      </div>
+    }
+  }
+
+  <!-- Empty initial state -->
+  @if (!isLoading() && !page()) {
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fa-solid fa-earth-americas"></i></div>
+      <h3>Ready to fetch</h3>
+      <p>Click "Fetch Destinations" to load countries from the travel API. You can then add individual or bulk destinations to your database.</p>
+    </div>
+  }
+</div>

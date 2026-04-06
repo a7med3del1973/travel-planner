@@ -1,0 +1,156 @@
+<div class="page animate-slide-in">
+  <div class="page-header">
+    <div>
+      <h1>Destinations</h1>
+      <p>Manage all travel destinations in the system</p>
+    </div>
+    <button class="btn btn-primary" (click)="openModal()" id="add-dest-btn">
+      <i class="fa-solid fa-plus"></i> Add Destination
+    </button>
+  </div>
+
+  @if (successMsg()) {
+    <div class="alert alert-success" role="status"><i class="fa-solid fa-circle-check"></i> {{ successMsg() }}</div>
+  }
+  @if (errorMsg()) {
+    <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}</div>
+  }
+
+  @if (isLoading()) {
+    <app-loading-spinner label="Loading destinations…" />
+  } @else if (page()?.content?.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+      <h3>No destinations yet</h3>
+      <p>Click "Add Destination" or use "Fetch from API" to import destinations.</p>
+    </div>
+  } @else {
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Flag</th>
+            <th>Name</th>
+            <th>Capital</th>
+            <th>Region</th>
+            <th>Population</th>
+            <th>Currency</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dest of page()?.content ?? []; track dest.id) {
+            <tr>
+              <td>
+                @if (dest.flagUrl) {
+                  <img [src]="dest.flagUrl" [alt]="dest.name + ' flag'" class="flag-img" loading="lazy" />
+                } @else {
+                  <i class="fa-solid fa-earth-americas" style="color: var(--text-muted); font-size: 1.1rem;"></i>
+                }
+              </td>
+              <td><strong>{{ dest.name }}</strong></td>
+              <td>{{ dest.capital }}</td>
+              <td><span class="badge badge-info">{{ dest.region }}</span></td>
+              <td>{{ dest.population | population }}</td>
+              <td><span class="badge badge-accent">{{ dest.currency }}</span></td>
+              <td>
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteDestination(dest.id)"
+                  [disabled]="deletingId() === dest.id"
+                  [attr.aria-label]="'Delete ' + dest.name"
+                >
+                  @if (deletingId() === dest.id) {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                  } @else {
+                    <i class="fa-solid fa-trash-can"></i> Delete
+                  }
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if ((page()?.totalPages ?? 0) > 1) {
+      <div class="pagination-bar">
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="page()?.totalPages ?? 0"
+          [totalElements]="page()?.totalElements ?? 0"
+          (pageChange)="onPageChange($event)"
+        />
+      </div>
+    }
+  }
+</div>
+
+<!-- Add Destination Modal -->
+@if (showModal()) {
+  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Add Destination</h2>
+        <button class="btn-icon btn-secondary" (click)="closeModal()" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="dest-name">Country Name *</label>
+              <input id="dest-name" type="text" formControlName="name" class="form-control"
+                [class.is-invalid]="form.controls.name.invalid && form.controls.name.touched"
+                placeholder="e.g. Japan" />
+              @if (form.controls.name.invalid && form.controls.name.touched) {
+                <span class="form-error">Name is required</span>
+              }
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-capital">Capital *</label>
+              <input id="dest-capital" type="text" formControlName="capital" class="form-control"
+                [class.is-invalid]="form.controls.capital.invalid && form.controls.capital.touched"
+                placeholder="e.g. Tokyo" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="dest-region">Region *</label>
+              <input id="dest-region" type="text" formControlName="region" class="form-control"
+                [class.is-invalid]="form.controls.region.invalid && form.controls.region.touched"
+                placeholder="e.g. Asia" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-currency">Currency *</label>
+              <input id="dest-currency" type="text" formControlName="currency" class="form-control"
+                [class.is-invalid]="form.controls.currency.invalid && form.controls.currency.touched"
+                placeholder="e.g. JPY" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dest-population">Population *</label>
+            <input id="dest-population" type="number" formControlName="population" class="form-control"
+              [class.is-invalid]="form.controls.population.invalid && form.controls.population.touched"
+              placeholder="e.g. 125000000" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dest-flag">Flag URL</label>
+            <input id="dest-flag" type="url" formControlName="flagUrl" class="form-control"
+              placeholder="https://…/flag.png" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isAdding()">
+            @if (isAdding()) { <span class="btn-spinner"></span> Saving… } @else { Save Destination }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

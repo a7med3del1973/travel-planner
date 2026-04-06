@@ -1,0 +1,95 @@
+<div class="detail-page animate-slide-in">
+  <button class="back-btn" (click)="goBack()" aria-label="Back to destinations">
+    <i class="fa-solid fa-arrow-left"></i> Back to Destinations
+  </button>
+
+  @if (isLoading()) {
+    <app-loading-spinner label="Loading destination…" />
+  } @else if (errorMsg() && !destination()) {
+    <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}</div>
+  } @else if (destination(); as dest) {
+    <div class="detail-card">
+      <!-- Hero Banner -->
+      <div class="detail-hero">
+        @if (dest.flagUrl) {
+          <img [src]="dest.flagUrl" [alt]="dest.name + ' flag'" class="hero-flag" loading="lazy" />
+          <div class="hero-overlay"></div>
+        }
+        <div class="hero-content">
+          <div class="hero-region">{{ dest.region }}</div>
+          <h1 class="hero-name">{{ dest.name }}</h1>
+          <p class="hero-capital">Capital: {{ dest.capital }}</p>
+        </div>
+      </div>
+
+      <!-- Detail Body -->
+      <div class="detail-body">
+        <!-- Messages -->
+        @if (successMsg()) {
+          <div class="alert alert-success" role="status">{{ successMsg() }}</div>
+        }
+        @if (errorMsg()) {
+          <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}</div>
+        }
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-building-columns"></i></div>
+            <div class="info-content">
+              <span class="info-label">Capital City</span>
+              <span class="info-value">{{ dest.capital }}</span>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-earth-americas"></i></div>
+            <div class="info-content">
+              <span class="info-label">Region</span>
+              <span class="info-value">{{ dest.region }}</span>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="info-content">
+              <span class="info-label">Population</span>
+              <span class="info-value">{{ dest.population | population }}</span>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon"><i class="fa-solid fa-coins"></i></div>
+            <div class="info-content">
+              <span class="info-label">Currency</span>
+              <span class="info-value">{{ dest.currency }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="detail-actions">
+          @if (!isWanted()) {
+            <button
+              class="btn btn-primary btn-lg want-btn"
+              (click)="markWantToVisit()"
+              [disabled]="wantLoading()"
+              id="want-to-visit-btn"
+            >
+              @if (wantLoading()) {
+                <span class="btn-spinner"></span> Adding…
+              } @else {
+                <i class="fa-solid fa-heart"></i> Mark as Want to Visit
+              }
+            </button>
+          } @else {
+            <div class="wanted-badge">
+              <i class="fa-solid fa-heart"></i> <span>On Your Wish List</span>
+            </div>
+          }
+          <button class="btn btn-secondary btn-lg" (click)="goBack()"><i class="fa-solid fa-arrow-left"></i> Browse More</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

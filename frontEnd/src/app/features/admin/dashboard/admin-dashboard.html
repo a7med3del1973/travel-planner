@@ -1,0 +1,87 @@
+<div class="dashboard-page animate-slide-in">
+  <div class="page-header">
+    <h1>Admin Dashboard</h1>
+    <p>Manage travel destinations and API integrations</p>
+  </div>
+
+  @if (isLoading()) {
+    <app-loading-spinner label="Loading stats…" />
+  } @else {
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(99,102,241,0.1); color: var(--accent);"><i class="fa-solid fa-map-location-dot"></i></div>
+        <div class="stat-info">
+          <div class="stat-value">{{ totalDestinations() }}</div>
+          <div class="stat-label">Total Destinations</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(8,145,178,0.1); color: var(--cyan);"><i class="fa-solid fa-globe"></i></div>
+        <div class="stat-info">
+          <div class="stat-value">REST</div>
+          <div class="stat-label">API Connected</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(5,150,105,0.1); color: var(--success);"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-info">
+          <div class="stat-value">Live</div>
+          <div class="stat-label">System Status</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+      <h2 class="section-title">Quick Actions</h2>
+      <div class="actions-grid">
+        <button class="action-card" (click)="navigateTo('/admin/destinations')" aria-label="Manage Destinations">
+          <span class="action-icon"><i class="fa-solid fa-map-location-dot"></i></span>
+          <div class="action-info">
+            <strong>Manage Destinations</strong>
+            <span>Add, view and delete destinations</span>
+          </div>
+          <span class="action-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </button>
+
+        <button class="action-card" (click)="navigateTo('/admin/fetch-api')" aria-label="Fetch from API">
+          <span class="action-icon"><i class="fa-solid fa-cloud-arrow-down"></i></span>
+          <div class="action-info">
+            <strong>Fetch from API</strong>
+            <span>Import destinations from the travel API</span>
+          </div>
+          <span class="action-arrow"><i class="fa-solid fa-chevron-right"></i></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Info Panel -->
+    <section class="info-panel">
+      <h2 class="section-title" style="margin-bottom: 1rem;">How It Works</h2>
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <strong>Fetch Suggestions</strong>
+            <span>Go to "Fetch from API" to browse countries from the travel API</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <strong>Add Destinations</strong>
+            <span>Select individual or bulk-add destinations to your local database</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <strong>Users Discover</strong>
+            <span>Approved destinations are immediately visible to all users</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+</div>

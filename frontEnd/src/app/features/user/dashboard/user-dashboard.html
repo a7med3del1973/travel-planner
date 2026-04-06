@@ -1,0 +1,78 @@
+<div class="dashboard animate-slide-in">
+  <!-- Hero Header -->
+  <div class="hero-section">
+    <div class="hero-text">
+      <h1>Explore Destinations</h1>
+      <p>Discover amazing places around the world and plan your next adventure</p>
+    </div>
+    <div class="search-container">
+      <app-search-bar
+        placeholder="Search destinations by name…"
+        (searchChange)="onSearchChange($event)"
+        (searchSubmit)="onSearchSubmit($event)"
+      />
+    </div>
+  </div>
+
+  <!-- Messages -->
+  @if (successMsg()) {
+    <div class="alert alert-success" role="status">{{ successMsg() }}</div>
+  }
+  @if (errorMsg()) {
+    <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}</div>
+  }
+
+  <!-- Search Mode Indicator -->
+  @if (isSearchMode()) {
+    <div class="search-mode-bar">
+      @if (isSearching()) {
+        <span><i class="fa-solid fa-magnifying-glass"></i> Searching for "<strong>{{ searchQuery() }}</strong>"…</span>
+      } @else {
+        <span><i class="fa-solid fa-magnifying-glass"></i> Results for "<strong>{{ searchQuery() }}</strong>": {{ displayedItems().length }} found</span>
+      }
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (isLoading() || isSearching()) {
+    <app-loading-spinner [label]="isSearching() ? 'Searching…' : 'Loading destinations…'" />
+  } @else if (displayedItems().length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon"><i class="fa-solid fa-earth-americas"></i></div>
+      @if (isSearchMode()) {
+        <h3>No results found</h3>
+        <p>No destinations match "<strong>{{ searchQuery() }}</strong>". Try a different search term.</p>
+      } @else {
+        <h3>No destinations available</h3>
+        <p>Destinations will appear here once the admin adds them.</p>
+      }
+    </div>
+  } @else {
+    <!-- Destinations Grid -->
+    <div class="destinations-grid">
+      @for (dest of displayedItems(); track dest.id) {
+        <app-destination-card
+          [destination]="dest"
+          [isWanted]="isWanted(dest.id)"
+          [wantLoading]="isWantLoading(dest.id)"
+          [showDetails]="true"
+          [showWantToVisit]="!isWanted(dest.id)"
+          (viewDetails)="viewDetails($event)"
+          (wantToVisit)="markWantToVisit($event)"
+        />
+      }
+    </div>
+
+    <!-- Pagination (only in browse mode) -->
+    @if (!isSearchMode() && (page()?.totalPages ?? 0) > 1) {
+      <div class="pagination-bar">
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="page()?.totalPages ?? 0"
+          [totalElements]="page()?.totalElements ?? 0"
+          (pageChange)="onPageChange($event)"
+        />
+      </div>
+    }
+  }
+</div>

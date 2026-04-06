@@ -1,0 +1,93 @@
+<div class="auth-page">
+  <!-- Background decoration -->
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+
+  <div class="auth-container animate-slide-in">
+    <!-- Logo / Brand -->
+    <div class="auth-brand">
+      <div class="brand-icon"><i class="fa-solid fa-paper-plane"></i></div>
+      <h1 class="brand-name">Travel<span class="brand-accent">Planner</span></h1>
+      <p class="brand-tagline">Discover your next adventure</p>
+    </div>
+
+    <!-- Card -->
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <h2>Welcome back</h2>
+        <p>Sign in to your account</p>
+      </div>
+
+      @if (errorMsg()) {
+        <div class="alert alert-danger" role="alert">
+          <i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Username -->
+        <div class="form-group">
+          <label class="form-label" for="login-username">Username / Email</label>
+          <input
+            id="login-username"
+            type="text"
+            formControlName="username"
+            class="form-control"
+            [class.is-invalid]="usernameCtrl.invalid && usernameCtrl.touched"
+            placeholder="your@email.com"
+            autocomplete="username"
+          />
+          @if (usernameCtrl.invalid && usernameCtrl.touched) {
+            <span class="form-error" role="alert">Username is required</span>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-group">
+            <input
+              id="login-password"
+              [type]="showPass() ? 'text' : 'password'"
+              formControlName="password"
+              class="form-control"
+              [class.is-invalid]="passwordCtrl.invalid && passwordCtrl.touched"
+              placeholder="••••••••"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="pass-toggle"
+              (click)="showPass.set(!showPass())"
+              [attr.aria-label]="showPass() ? 'Hide password' : 'Show password'"
+            >
+              <i class="fa-solid" [class.fa-eye]="!showPass()" [class.fa-eye-slash]="showPass()"></i>
+            </button>
+          </div>
+          @if (passwordCtrl.invalid && passwordCtrl.touched) {
+            <span class="form-error" role="alert">Password must be at least 6 characters</span>
+          }
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="btn btn-primary btn-full btn-lg"
+          style="margin-top: 1.5rem;"
+          [disabled]="isLoading()"
+        >
+          @if (isLoading()) {
+            <span class="btn-spinner"></span> Signing in…
+          } @else {
+            Sign In
+          }
+        </button>
+      </form>
+
+      <p class="auth-footer">
+        Don't have an account?
+        <a routerLink="/auth/register" class="auth-link">Create one</a>
+      </p>
+    </div>
+  </div>
+</div>
