@@ -19,10 +19,6 @@
         <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> {{ errorMsg() }}</div>
       }
 
-      @if (form.errors?.['passwordMismatch'] && form.touched) {
-        <div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation"></i> Passwords do not match</div>
-      }
-
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <!-- Username -->
         <div class="form-group">
@@ -93,10 +89,13 @@
             [type]="showPass() ? 'text' : 'password'"
             formControlName="confirmPassword"
             class="form-control"
-            [class.is-invalid]="confirmPasswordCtrl.invalid && confirmPasswordCtrl.touched"
+            [class.is-invalid]="(confirmPasswordCtrl.touched && confirmPasswordCtrl.invalid) || (form.errors?.['passwordMismatch'] && form.touched)"
             placeholder="••••••••"
             autocomplete="new-password"
           />
+          @if (form.errors?.['passwordMismatch'] && form.touched) {
+            <span class="form-error" role="alert">Passwords do not match</span>
+          }
         </div>
 
         <button

@@ -14,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -36,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseGet(() -> userRepository.findByUsername(request.username())
                         .orElseThrow(() -> new IllegalArgumentException("Invalid credentials")));
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(Map.of("id", user.getId()), user);
 
         return AuthResponse.builder()
                 .username(user.getUsername())
@@ -64,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(Map.of("id", user.getId()), user);
 
         return AuthResponse.builder()
                 .username(user.getUsername())
