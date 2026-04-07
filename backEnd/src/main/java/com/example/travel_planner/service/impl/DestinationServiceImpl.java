@@ -31,7 +31,6 @@ public class DestinationServiceImpl implements DestinationService {
     @Value("${rest.countries.api.url}")
     private String apiUrl;
 
-    // ── Admin ──────────────────────────────────────────────────────────────────
 
     @Override
     public Page<CountryResponse> fetchFromApi(int page, int size) {

@@ -14,12 +14,11 @@ import {
 } from '@angular/common/http';
 import { routes } from './app.routes';
 import { jwtInterceptor } from './core/interceptors/jwt.interceptor';
-import { mockInterceptor } from './core/interceptors/mock.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding(), withViewTransitions()),
-    provideHttpClient(withFetch(), withInterceptors([mockInterceptor, jwtInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([jwtInterceptor])),
   ],
 };
