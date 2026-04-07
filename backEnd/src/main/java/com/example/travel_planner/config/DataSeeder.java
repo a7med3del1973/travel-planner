@@ -44,9 +44,9 @@ public class DataSeeder implements CommandLineRunner {
 
         if (!userRepository.existsByUsername("user")) {
             User user = User.builder()
-                    .username("ahmed")
-                    .email("ahmed@travel.com")
-                    .password(passwordEncoder.encode("ahmed123"))
+                    .username("user")
+                    .email("user@travel.com")
+                    .password(passwordEncoder.encode("user123"))
                     .role(Role.USER)
                     .build();
             userRepository.save(user);
