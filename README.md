@@ -12,7 +12,7 @@ A robust RESTful Spring Boot application for managing travel destinations. The s
 ## Tech Stack
 - **Framework:** Spring Boot 3 / Java 17
 - **Database:** PostgreSQL 15
-- **Security:** Spring Security & jjwt
+- **Security:** Spring Security & jwt
 - **Containerization:** Docker & Docker Compose
 - **Build Tool:** Maven
 
