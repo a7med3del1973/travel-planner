@@ -41,5 +41,16 @@ public class DataSeeder implements CommandLineRunner {
             userRepository.save(admin);
             System.out.println("Default ADMIN account created - username: admin, password: admin123");
         }
+
+        if (!userRepository.existsByUsername("user")) {
+            User user = User.builder()
+                    .username("ahmed")
+                    .email("ahmed@travel.com")
+                    .password(passwordEncoder.encode("ahmed123"))
+                    .role(Role.USER)
+                    .build();
+            userRepository.save(user);
+            System.out.println("Default USER account created - username: user, password: user123");
+        }
     }
 }
