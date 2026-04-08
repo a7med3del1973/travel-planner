@@ -2,6 +2,7 @@ package com.example.travel_planner.controller;
 
 import com.example.travel_planner.dto.BulkAddResponse;
 import com.example.travel_planner.dto.CountryResponse;
+import com.example.travel_planner.dto.DestinationResponse;
 import com.example.travel_planner.dto.MessageResponse;
 import com.example.travel_planner.dto.request.DestinationRequest;
 import com.example.travel_planner.service.DestinationService;
@@ -48,5 +49,11 @@ public class AdminController {
         destinationService.deleteDestination(id);
         return ResponseEntity
                 .ok(MessageResponse.builder().message("Destination Deleted successfully").build());
+    }
+
+    @GetMapping("/destinations")
+    public ResponseEntity<Page<DestinationResponse>> getDestinations(@RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(destinationService.getDestinations(page, size));
     }
 }

@@ -93,8 +93,8 @@ export class AdminDestinationsComponent implements OnInit {
         this.loadDestinations(this.currentPage());
         setTimeout(() => this.successMsg.set(''), 3000);
       },
-      error: () => {
-        this.errorMsg.set('Failed to delete destination.');
+      error: (err) => {
+        this.errorMsg.set(err?.error?.message ?? 'Failed to delete destination.');
         this.deletingId.set(null);
       },
     });

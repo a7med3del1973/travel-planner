@@ -7,6 +7,7 @@ import com.example.travel_planner.mapper.CountryMapper;
 import com.example.travel_planner.mapper.DestinationMapper;
 import com.example.travel_planner.model.Destination;
 import com.example.travel_planner.repository.DestinationRepository;
+import com.example.travel_planner.repository.VisitRepository;
 import com.example.travel_planner.service.DestinationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,15 +28,14 @@ public class DestinationServiceImpl implements DestinationService {
     private final CountryMapper countryMapper;
     private final DestinationMapper destinationMapper;
     private final DestinationRepository destinationRepository;
+    private final VisitRepository visitRepository;
 
     @Value("${rest.countries.api.url}")
     private String apiUrl;
 
-
     @Override
     public Page<CountryResponse> fetchFromApi(int page, int size) {
-        RestCountryApiResponse[] rawCountries =
-                restTemplate.getForObject(apiUrl, RestCountryApiResponse[].class);
+        RestCountryApiResponse[] rawCountries = restTemplate.getForObject(apiUrl, RestCountryApiResponse[].class);
 
         List<CountryResponse> allCountries = Optional.ofNullable(rawCountries).map(Arrays::asList)
                 .orElse(Collections.emptyList())
@@ -47,8 +47,8 @@ public class DestinationServiceImpl implements DestinationService {
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), allCountries.size());
 
-        List<CountryResponse> subList = (start <= allCountries.size()) 
-                ? allCountries.subList(start, end) 
+        List<CountryResponse> subList = (start <= allCountries.size())
+                ? allCountries.subList(start, end)
                 : Collections.emptyList();
 
         return new PageImpl<>(subList, pageable, allCountries.size());
@@ -78,8 +78,7 @@ public class DestinationServiceImpl implements DestinationService {
         }
 
         destinationRepository.saveAll(
-                newOnes.stream().map(destinationMapper::toEntity).toList()
-        );
+                newOnes.stream().map(destinationMapper::toEntity).toList());
 
         return BulkAddResponse.builder()
                 .saved(newOnes.size())
@@ -93,9 +92,11 @@ public class DestinationServiceImpl implements DestinationService {
         if (!destinationRepository.existsById(id)) {
             throw new EntityNotFoundException("Destination", id);
         }
+
+        visitRepository.deleteByDestinationId(id);
+
         destinationRepository.deleteById(id);
     }
-
 
     @Override
     public Page<DestinationResponse> getDestinations(int page, int size) {
@@ -124,5 +125,3 @@ public class DestinationServiceImpl implements DestinationService {
                 .toList();
     }
 }
-
-

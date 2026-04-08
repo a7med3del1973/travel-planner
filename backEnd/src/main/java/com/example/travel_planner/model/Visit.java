@@ -32,4 +32,6 @@ public class Visit {
 
     @CreationTimestamp
     private LocalDateTime markedAt;
+
+    private Boolean isLiked;
 }

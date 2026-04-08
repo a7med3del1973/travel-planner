@@ -40,7 +40,7 @@ export class AdminService {
   getAllDestinations(page = 0, size = 10): Observable<Page<Destination>> {
     const params = new HttpParams().set('page', page).set('size', size);
     return this.http.get<Page<Destination>>(
-      `${this.baseUrl}/api/user/approved-destinations`,
+      `${this.baseUrl}/api/admin/destinations`,
       { params }
     );
   }

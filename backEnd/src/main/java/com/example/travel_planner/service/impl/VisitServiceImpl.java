@@ -34,6 +34,7 @@ public class VisitServiceImpl implements VisitService {
         Visit visit = Visit.builder()
                 .user(user)
                 .destination(destination)
+                .isLiked(true)
                 .build();
 
         visitRepository.save(visit);

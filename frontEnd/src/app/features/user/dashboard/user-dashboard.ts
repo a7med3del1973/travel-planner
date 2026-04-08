@@ -44,7 +44,6 @@ export class UserDashboardComponent implements OnInit {
   currentPage = signal(0);
   pageSize = 9;
   searchQuery = signal('');
-  wantedIds = signal<Set<number>>(new Set());
   wantLoadingId = signal<number | null>(null);
 
   isSearchMode = computed(() => this.searchQuery().trim().length > 0);
@@ -113,9 +112,19 @@ export class UserDashboardComponent implements OnInit {
     this.wantLoadingId.set(destId);
     this.destService.markWantToVisit(destId, userId).subscribe({
       next: () => {
-        const updated = new Set(this.wantedIds());
-        updated.add(destId);
-        this.wantedIds.set(updated);
+        // Update the item locally
+        if (this.searchResults()) {
+          const results = [...this.searchResults()!];
+          const idx = results.findIndex(d => d.id === destId);
+          if (idx !== -1) results[idx].isLiked = true;
+          this.searchResults.set(results);
+        }
+        if (this.page()) {
+          const content = [...this.page()!.content];
+          const idx = content.findIndex(d => d.id === destId);
+          if (idx !== -1) content[idx].isLiked = true;
+          this.page.set({ ...this.page()!, content });
+        }
         this.wantLoadingId.set(null);
         this.showSuccess('Added to your wish list! ❤️');
       },
@@ -128,7 +137,6 @@ export class UserDashboardComponent implements OnInit {
 
   onPageChange(p: number): void { this.loadPage(p); }
 
-  isWanted(id: number): boolean { return this.wantedIds().has(id); }
   isWantLoading(id: number): boolean { return this.wantLoadingId() === id; }
 
   private showSuccess(msg: string): void {

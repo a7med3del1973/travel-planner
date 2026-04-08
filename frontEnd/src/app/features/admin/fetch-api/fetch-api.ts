@@ -78,7 +78,7 @@ export class FetchApiComponent {
         this.savingId.set(null);
       },
       error: (err) => {
-        this.errorMsg.set(err?.error?.message ?? `Failed to add "${dest.name}".`);
+        this.errorMsg.set(err?.error?.message ?? `Failed to add "${dest.name}". It already been added before.`);
         this.savingId.set(null);
       },
     });

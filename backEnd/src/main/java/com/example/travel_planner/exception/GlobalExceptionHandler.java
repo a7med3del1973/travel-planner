@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -30,7 +31,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MessageResponse> handleAuthenticationException(AuthenticationException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(new MessageResponse("Unauthorized: Authentication is required. Please provide a valid Bearer token."));
+                .body(new MessageResponse(
+                        "Unauthorized: Authentication is required. Please provide a valid Bearer token."));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -46,6 +48,18 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new MessageResponse(ex.getMessage()));
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<MessageResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new MessageResponse("Cannot delete this record because it is referenced by other records."));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<MessageResponse> handleGenericException(Exception ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new MessageResponse("An unexpected error occurred: " + ex.getMessage()));
+    }
 }
-
-

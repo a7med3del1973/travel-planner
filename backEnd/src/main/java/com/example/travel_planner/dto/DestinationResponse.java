@@ -8,7 +8,8 @@ public record DestinationResponse(
         Long population,
         String currency,
         String flagUrl,
-        Boolean approved
+        Boolean approved,
+        Boolean isLiked
 ) {
 }
 

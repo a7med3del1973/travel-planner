@@ -53,10 +53,10 @@
       @for (dest of displayedItems(); track dest.id) {
         <app-destination-card
           [destination]="dest"
-          [isWanted]="isWanted(dest.id)"
+          [isWanted]="dest.isLiked === true"
           [wantLoading]="isWantLoading(dest.id)"
           [showDetails]="true"
-          [showWantToVisit]="!isWanted(dest.id)"
+          [showWantToVisit]="dest.isLiked !== true"
           (viewDetails)="viewDetails($event)"
           (wantToVisit)="markWantToVisit($event)"
         />

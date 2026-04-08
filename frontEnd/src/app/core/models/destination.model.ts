@@ -7,6 +7,7 @@ export interface Destination {
   currency: string;
   flagUrl: string;
   approved?: boolean;
+  isLiked?: boolean;
 }
 
 export interface DestinationRequest {

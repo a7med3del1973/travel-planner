@@ -3,10 +3,21 @@ package com.example.travel_planner.mapper;
 import com.example.travel_planner.dto.request.DestinationRequest;
 import com.example.travel_planner.dto.DestinationResponse;
 import com.example.travel_planner.model.Destination;
+import com.example.travel_planner.model.User;
+import com.example.travel_planner.model.Visit;
+import com.example.travel_planner.repository.VisitRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
+@RequiredArgsConstructor
 public class DestinationMapper {
+
+    private final VisitRepository visitRepository;
 
     public Destination toEntity(DestinationRequest request) {
         return Destination.builder()
@@ -21,6 +32,15 @@ public class DestinationMapper {
     }
 
     public DestinationResponse toResponse(Destination destination) {
+        Boolean isLiked = false;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User user) {
+            Optional<Visit> visit = visitRepository.findByUserIdAndDestinationId(user.getId(), destination.getId());
+            if (visit.isPresent() && Boolean.TRUE.equals(visit.get().getIsLiked())) {
+                isLiked = true;
+            }
+        }
+
         return new DestinationResponse(
                 destination.getId(),
                 destination.getName(),
@@ -29,6 +49,7 @@ public class DestinationMapper {
                 destination.getPopulation(),
                 destination.getCurrency(),
                 destination.getFlagUrl(),
-                destination.getApproved());
+                destination.getApproved(),
+                isLiked);
     }
 }

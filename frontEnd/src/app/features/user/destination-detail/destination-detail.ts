@@ -36,7 +36,7 @@ export class DestinationDetailComponent implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) { this.router.navigate(['/user/dashboard']); return; }
     this.destService.getDestinationById(id).subscribe({
-      next: (d) => { this.destination.set(d); this.isLoading.set(false); },
+      next: (d) => { this.destination.set(d); this.isWanted.set(d.isLiked === true); this.isLoading.set(false); },
       error: () => { this.errorMsg.set('Destination not found.'); this.isLoading.set(false); },
     });
   }
