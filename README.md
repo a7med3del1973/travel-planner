@@ -1,10 +1,10 @@
-# 🌍 Travel Planner Application
+# Travel Planner Application
 
 > A robust Full-Stack application for managing and exploring travel destinations. Features seamless integration with the external RestCountries API, Role-Based Access Control (RBAC) via JSON Web Tokens (JWT), and a responsive user interface.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 - **Two-Tier Architecture:** Complete Spring Boot 3 Backend API and an Angular-based Frontend UI.
 - **Authentication & Security:** JWT-based stateless authentication with `ADMIN` and `USER` role segregation. Secured endpoints and BCrypt password hashing.
 - **External API Integration:** Seamlessly fetches real-time country data from [restcountries.com](https://restcountries.com/).
@@ -12,7 +12,7 @@
 - **User Engagement:** Users can browse approved destinations with pagination, search by country name, and mark destinations as "Want to Visit".
 - **Containerized Ecosystem:** The entire stack (Database, Backend, Frontend) boots securely with a single Docker Compose command.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 | Component | Technologies Used |
 |-----------|-------------------|
 | **Backend** | Java 17, Spring Boot 3, Spring Security (JWT), Hibernate/JPA, Maven |
@@ -22,7 +22,7 @@
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -30,7 +30,7 @@ You need the following installed on your machine depending on your preferred exe
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) *(Recommended & Easiest method)*
 - **OR** [Java 17](https://adoptium.net/), [Maven](https://maven.apache.org/), and [Node.js](https://nodejs.org/) & Angular CLI *(For manual local execution)*
 
-### 🐳 Option 1: Run with Docker (Recommended)
+###  Option 1: Run with Docker (Recommended)
 
 The easiest way to boot the frontend, backend, and the database simultaneously:
 
@@ -44,7 +44,7 @@ The easiest way to boot the frontend, backend, and the database simultaneously:
    - **Backend API:** `http://localhost:9090`
    - **PostgreSQL Database:** `localhost:5432`
 
-### 💻 Option 2: Run Locally (Without Docker)
+###  Option 2: Run Locally (Without Docker)
 
 <details>
 <summary>Click to expand manual setup instructions</summary>
@@ -65,7 +65,7 @@ The easiest way to boot the frontend, backend, and the database simultaneously:
 
 ---
 
-## 🔐 Default Seed Data
+##  Default Seed Data
 On initial boot, the application automatically runs a Data Seeder that generates default accounts so you can immediately log in and test the system:
 
 **Administrator Account:**
@@ -78,7 +78,7 @@ On initial boot, the application automatically runs a Data Seeder that generates
 
 ---
 
-## 💾 Database Management
+##  Database Management
 
 When running via Docker, you can connect to the isolated PostgreSQL database using any GUI tool (like DBeaver, DataGrip, or pgAdmin) with the following credentials:
 - **Host:** `localhost`
@@ -94,7 +94,7 @@ docker exec -it travel_planner_db psql -U postgres -d travel_planner_db
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 All endpoints receive and return `application/json` payloads.
 
@@ -127,7 +127,7 @@ All endpoints receive and return `application/json` payloads.
 
 ---
 
-## 🚫 Error Handling
+##  Error Handling
 The application wraps unauthorized requests ensuring the API remains resilient instead of throwing a generic server error. 
 
 **401 Unauthorized:** 
