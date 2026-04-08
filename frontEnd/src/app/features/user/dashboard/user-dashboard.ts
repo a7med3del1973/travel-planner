@@ -126,7 +126,7 @@ export class UserDashboardComponent implements OnInit {
           this.page.set({ ...this.page()!, content });
         }
         this.wantLoadingId.set(null);
-        this.showSuccess('Added to your wish list! ❤️');
+        this.showSuccess('Added to your wish to visit list');
       },
       error: (err) => {
         this.errorMsg.set(err?.error?.message ?? 'Failed to mark destination.');

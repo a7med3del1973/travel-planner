@@ -50,7 +50,7 @@ export class DestinationDetailComponent implements OnInit {
       next: () => {
         this.isWanted.set(true);
         this.wantLoading.set(false);
-        this.successMsg.set('Added to your wish list! ❤️');
+        this.successMsg.set('Added to your wish to visit list');
       },
       error: (err) => {
         this.errorMsg.set(err?.error?.message ?? 'Failed to mark destination.');
