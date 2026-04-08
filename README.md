@@ -1,62 +1,100 @@
-# Travel Planner API
+# 🌍 Travel Planner Application
 
-A robust RESTful Spring Boot application for managing travel destinations. The system integrates with the external RestCountries API, provides Role-Based Access Control (RBAC) via JSON Web Tokens (JWT), and separates administrative management from user browsing and interaction.
-
-## Features
-- **Authentication & Security:** JWT-based authentication with `ADMIN` and `USER` role segregation. Secured endpoints and BCrypt password hashing.
-- **External API Integration:** Seamlessly fetches country data from [restcountries.com](https://restcountries.com/).
-- **Admin Management:** Administrators can browse external API data, add single or bulk destinations, and delete destinations.
-- **User Features:** Users can browse approved destinations with pagination, search by country name, and mark destinations as "Want to Visit".
-- **Clean Logging & Error Handling:** Intercepts security exceptions to provide clean JSON responses and logs API latency/status cleanly in the console.
-
-## Tech Stack
-- **Framework:** Spring Boot 3 / Java 17
-- **Database:** PostgreSQL 15
-- **Security:** Spring Security & jwt
-- **Containerization:** Docker & Docker Compose
-- **Build Tool:** Maven
+> A robust Full-Stack application for managing and exploring travel destinations. Features seamless integration with the external RestCountries API, Role-Based Access Control (RBAC) via JSON Web Tokens (JWT), and a responsive user interface.
 
 ---
 
-## Getting Started
+## ✨ Key Features
+- **Two-Tier Architecture:** Complete Spring Boot 3 Backend API and an Angular-based Frontend UI.
+- **Authentication & Security:** JWT-based stateless authentication with `ADMIN` and `USER` role segregation. Secured endpoints and BCrypt password hashing.
+- **External API Integration:** Seamlessly fetches real-time country data from [restcountries.com](https://restcountries.com/).
+- **Admin Management:** Administrators can browse external API data, add single or bulk destinations, and delete destinations.
+- **User Engagement:** Users can browse approved destinations with pagination, search by country name, and mark destinations as "Want to Visit".
+- **Containerized Ecosystem:** The entire stack (Database, Backend, Frontend) boots securely with a single Docker Compose command.
+
+## 🛠️ Tech Stack
+| Component | Technologies Used |
+|-----------|-------------------|
+| **Backend** | Java 17, Spring Boot 3, Spring Security (JWT), Hibernate/JPA, Maven |
+| **Frontend** | Angular, TypeScript, HTML/CSS |
+| **Database** | PostgreSQL 15 |
+| **DevOps** | Docker, Docker Compose |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
 You need the following installed on your machine depending on your preferred execution method:
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Easiest method)
-- **OR** [Java 17](https://adoptium.net/) & [Maven](https://maven.apache.org/) (For manual local execution)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) *(Recommended & Easiest method)*
+- **OR** [Java 17](https://adoptium.net/), [Maven](https://maven.apache.org/), and [Node.js](https://nodejs.org/) & Angular CLI *(For manual local execution)*
 
-### Option 1: Run with Docker (Recommended)
+### 🐳 Option 1: Run with Docker (Recommended)
 
-The easiest way to boot the application and the database simultaneously:
+The easiest way to boot the frontend, backend, and the database simultaneously:
 
 1. Clone the repository and navigate into it.
 2. Run the following command in your terminal:
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
-3. The API will be available at `http://localhost:9090`. The PostgreSQL database will securely boot alongside it.
+3. **Access the application:**
+   - **Frontend UI:** `http://localhost:4200`
+   - **Backend API:** `http://localhost:9090`
+   - **PostgreSQL Database:** `localhost:5432`
 
-### Option 2: Run Locally (Without Docker)
+### 💻 Option 2: Run Locally (Without Docker)
 
-If you wish to run the app manually:
+<details>
+<summary>Click to expand manual setup instructions</summary>
 
-1. Ensure you have a local PostgreSQL instance running.
-2. Create a database named `travel_planner_db`.
-3. Update `application.properties` credentials if your local database has a different username/password.
-4. Run the Maven Spring Boot command:
+1. **Database:** Ensure you have a local PostgreSQL instance running. Create a database named `travel_planner_db`.
+2. **Backend:** Update `backEnd/src/main/resources/application.properties` credentials.
    ```bash
+   cd backEnd
    mvn spring-boot:run
    ```
-
-### Default Seed Data
-On initial boot, the application automatically runs a Data Seeder that generates a default Administrator account for you:
-- **Username:** `admin`
-- **Password:** `admin123`
+3. **Frontend:** Serve the Angular application.
+   ```bash
+   cd frontEnd
+   npm install
+   ng serve
+   ```
+</details>
 
 ---
 
-## API Endpoints
+## 🔐 Default Seed Data
+On initial boot, the application automatically runs a Data Seeder that generates default accounts so you can immediately log in and test the system:
+
+**Administrator Account:**
+- **Username:** `admin` (or email: `admin@travel.com`)
+- **Password:** `admin123`
+
+**Standard User Account:**
+- **Username:** `user` (or email: `user@travel.com`)
+- **Password:** `user123`
+
+---
+
+## 💾 Database Management
+
+When running via Docker, you can connect to the isolated PostgreSQL database using any GUI tool (like DBeaver, DataGrip, or pgAdmin) with the following credentials:
+- **Host:** `localhost`
+- **Port:** `5432`
+- **Database:** `travel_planner_db`
+- **User:** `postgres`
+- **Password:** `root`
+
+Alternatively, you can interact with the database via the terminal:
+```bash
+docker exec -it travel_planner_db psql -U postgres -d travel_planner_db
+```
+
+---
+
+## 📡 API Reference
 
 All endpoints receive and return `application/json` payloads.
 
@@ -66,19 +104,10 @@ All endpoints receive and return `application/json` payloads.
 | `POST` | `/api/auth/register` | Registers a new standard user. |
 | `POST` | `/api/auth/login` | Authenticates a user and returns a Bearer JWT Token. |
 
-**Login Payload Example:**
-```json
-{
-    "username": "admin",
-    "password": "admin123"
-}
-```
-*Note: Copy the `"token"` from the response to use in the Authorization header for protected routes.*
+*Note: Copy the `"token"` from the response to use in the `Authorization: Bearer <token>` header for protected routes.*
 
 
 ### 2. Admin Operations (Requires `ADMIN` Role)
-*Pass the JWT token as a header: `Authorization: Bearer <your-token>`*
-
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/admin/fetch-from-api` | Fetches raw destination data dynamically from RestCountries API. Supports pagination (e.g. `?page=0&size=10`). |
@@ -88,22 +117,18 @@ All endpoints receive and return `application/json` payloads.
 
 
 ### 3. User Operations (Requires `USER` Role)
-*Pass the JWT token as a header: `Authorization: Bearer <your-token>`*
-
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/user/approved-destinations` | Browses all database-approved destinations. Supports pagination. |
 | `GET` | `/api/user/destinations/{id}` | Fetches full details for a specific destination by its ID. |
 | `GET` | `/api/user/destinations/search` | Searches destinations by name (e.g. `?name=Mex`). Case-insensitive. |
-| `POST` | `/api/user/visit/{destinationId}` | Marks a specific destination as "Want to visit" for the currently logged-in user. |
+| `POST` | `/api/user/visit/{destinationId}` | Marks a specific destination as "Want to visit" for the logged-in user. |
 | `DELETE`| `/api/user/visit/{destinationId}` | Un-marks a destination from the user's "Want to visit" list. |
 
 ---
 
-## Error Handling
-
+## 🚫 Error Handling
 The application wraps unauthorized requests ensuring the API remains resilient instead of throwing a generic server error. 
-If an invalid token or unregistered endpoint is accessed:
 
 **401 Unauthorized:** 
 ```json

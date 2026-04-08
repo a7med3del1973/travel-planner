@@ -39,7 +39,7 @@ public class DataSeeder implements CommandLineRunner {
                     .role(Role.ADMIN)
                     .build();
             userRepository.save(admin);
-            System.out.println("Default ADMIN account created - username: admin, password: admin123");
+            System.out.println("Default ADMIN account created -> username: admin, password: admin123");
         }
 
         if (!userRepository.existsByUsername("user")) {
@@ -50,7 +50,7 @@ public class DataSeeder implements CommandLineRunner {
                     .role(Role.USER)
                     .build();
             userRepository.save(user);
-            System.out.println("Default USER account created - username: user, password: user123");
+            System.out.println("Default USER account created -> username: user, password: user123");
         }
     }
 }
