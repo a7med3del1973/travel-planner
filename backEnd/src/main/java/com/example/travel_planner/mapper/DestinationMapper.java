@@ -41,15 +41,16 @@ public class DestinationMapper {
             }
         }
 
-        return new DestinationResponse(
-                destination.getId(),
-                destination.getName(),
-                destination.getCapital(),
-                destination.getRegion(),
-                destination.getPopulation(),
-                destination.getCurrency(),
-                destination.getFlagUrl(),
-                destination.getApproved(),
-                isLiked);
+        return DestinationResponse.builder()
+                .id(destination.getId())
+                .name(destination.getName())
+                .capital(destination.getCapital())
+                .region(destination.getRegion())
+                .population(destination.getPopulation())
+                .currency(destination.getCurrency())
+                .flagUrl(destination.getFlagUrl())
+                .approved(destination.getApproved())
+                .isLiked(isLiked)
+                .build();
     }
 }
