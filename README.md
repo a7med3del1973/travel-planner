@@ -87,7 +87,7 @@ When running via Docker, you can connect to the isolated PostgreSQL database usi
 - **User:** `postgres`
 - **Password:** `root`
 
-Alternatively, you can interact with the database via the terminal:
+You can interact with the database via the terminal:
 ```bash
 docker exec -it travel_planner_db psql -U postgres -d travel_planner_db
 ```
