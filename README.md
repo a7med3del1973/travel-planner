@@ -123,7 +123,6 @@ All endpoints receive and return `application/json` payloads.
 | `GET` | `/api/user/destinations/{id}` | Fetches full details for a specific destination by its ID. |
 | `GET` | `/api/user/destinations/search` | Searches destinations by name (e.g. `?name=Mex`). Case-insensitive. |
 | `POST` | `/api/user/visit/{destinationId}` | Marks a specific destination as "Want to visit" for the logged-in user. |
-| `DELETE`| `/api/user/visit/{destinationId}` | Un-marks a destination from the user's "Want to visit" list. |
 
 ---
 
