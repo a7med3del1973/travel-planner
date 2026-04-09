@@ -1,6 +1,6 @@
 # Travel Planner Application
 
-> A robust Full-Stack application for managing and exploring travel destinations. Features seamless integration with the external RestCountries API, Role-Based Access Control (RBAC) via JSON Web Tokens (JWT), and a responsive user interface.
+> A Full-Stack application for managing and exploring travel destinations. Features seamless integration with the external RestCountries API, Role-Based Access Control (RBAC) via JSON Web Tokens (JWT), and a responsive user interface.
 
 ---
 
