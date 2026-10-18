@@ -10,13 +10,11 @@ import java.util.List;
 
 public interface DestinationService {
 
-    // Admin
     Page<CountryResponse> fetchFromApi(int page, int size);
     void addDestination(DestinationRequest request);
     BulkAddResponse bulkAddDestinations(List<DestinationRequest> requests);
     void deleteDestination(Long id);
 
-    // User
     Page<DestinationResponse> getDestinations(int page, int size);
     DestinationResponse getDestinationById(Long id);
     List<DestinationResponse> getDestinationsByName(String name);
